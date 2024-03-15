@@ -19,17 +19,15 @@ public class MonitorBanco {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Coge máquina hilo " + id);
 		maquinasenuso++;
 	}
 
 	public synchronized void soltarMaquina(String id) {
-		System.out.println("Suelta máquina hilo " + id);
 		maquinasenuso--;
 		notifyAll();
 	}
 	
-	public synchronized void cogerMesa(String id) {
+	public synchronized void cogerMesa(int x, int y) {
 		while (mesasenuso >= MAX_MESAS) {
 			try {
 				wait();
@@ -37,13 +35,17 @@ public class MonitorBanco {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Coge mesa hilo " + id);
+		System.out.println("--------------------------------------------------------------");
+		System.out.println("Tiempo en solicitar el servicio: " + x);
+		System.out.println("Será atendido en la mesa: ");
+		System.out.println("Tiempo en la mesa: " + y);
+		System.out.println("Tiempo de espera en la mesa1 = , mesa2 = , mesa3 = , mesa4 = ");
+		System.out.println("--------------------------------------------------------------");
 		mesasenuso++;
 	}
 	
 	public synchronized void soltarMesa(String id) {
-		System.out.println("Suelta mesa hilo " + id);
 		mesasenuso--;
-		notify();
+		notifyAll();
 	}
 }

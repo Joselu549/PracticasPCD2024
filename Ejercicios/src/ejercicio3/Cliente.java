@@ -13,10 +13,10 @@ public class Cliente extends Thread {
 	@Override
 	public void run() {
 		try {
-			monitor.cogerMaquina(getName() + "Tiempo máquina: " + x);
+			monitor.cogerMaquina(getName() + " Tiempo máquina: " + x);
 			Thread.sleep(x);
 			monitor.soltarMaquina(getName());
-			monitor.cogerMesa(getName()+ "Tiempo mesa: " + y);
+			monitor.cogerMesa(x, y);
 			Thread.sleep(y);
 			monitor.soltarMesa(getName());
 		} catch (InterruptedException e) {
