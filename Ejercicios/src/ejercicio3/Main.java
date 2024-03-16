@@ -6,9 +6,10 @@ public class Main {
 	public static void main(String[] args) {
 		MonitorBanco monitor = new MonitorBanco();
 		Thread[] clientes = new Thread[50];
+
 		for (Thread c : clientes) {
 			Random r = new Random();
-			c = new Cliente(500 + r.nextInt(1000), 500 + r.nextInt(1000), monitor);
+			c = new Cliente(300 + r.nextInt(501), 500 + r.nextInt(1001), monitor);
 			c.start();
 		}
 	}
