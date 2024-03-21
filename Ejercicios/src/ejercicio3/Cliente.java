@@ -17,9 +17,9 @@ public class Cliente extends Thread {
 			monitor.cogerMaquina();
 			Thread.sleep(x);
 			monitor.soltarMaquina();
-			monitor.cogerMesa(x, y);
+			int mesa = monitor.cogerMesa(x, y);
 			Thread.sleep(y);
-			monitor.soltarMesa();
+			monitor.soltarMesa(mesa);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

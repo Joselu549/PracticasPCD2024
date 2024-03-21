@@ -16,7 +16,7 @@ public class MonitorBanco {
 	public MonitorBanco() {
 		this.maquinasenuso = 0;
 		this.mesasenuso = 0;
-		this.tiempomesas = new int[4];
+		this.tiempomesas = new int[MAX_MESAS];
 		this.l = new ReentrantLock();
 		this.colamaquinas = l.newCondition();
 		this.colamesas = l.newCondition();
@@ -46,26 +46,30 @@ public class MonitorBanco {
 		}
 	}
 
-	public void cogerMesa(int x, int y) throws InterruptedException {
+	public int cogerMesa(int x, int y) throws InterruptedException {
+		int mesa;
 		l.lock();
 		try {
 			while (mesasenuso >= MAX_MESAS) {
 				colamesas.await();
 			}
 			// Coge mesa
-			int mesa = selectMesa(x, y);
-			tiempomesas[mesa] += y;
+			mesa = selectMesa(x, y);
+			//tiempomesas[mesa] += y;
+			tiempomesas[mesa]++;;
 			mesasenuso++;
 		} finally {
 			l.unlock();
 		}
+		return mesa;
 	}
 
-	public void soltarMesa() {
+	public void soltarMesa(int mesa) {
 		l.lock();
 		try {
 			// Suelto mesa
 			mesasenuso--;
+			tiempomesas[mesa]--;
 			colamesas.signal();
 		} finally {
 			l.unlock();
@@ -75,17 +79,11 @@ public class MonitorBanco {
 	private int selectMesa(int x, int y) {
 		int mesaselec = 0;
 		int tiempomin = tiempomesas[0];
-		if (tiempomesas[1] < tiempomin) {
-			mesaselec = 1;
-			tiempomin = tiempomesas[1];
-		}
-		if (tiempomesas[2] < tiempomin) {
-			mesaselec = 2;
-			tiempomin = tiempomesas[2];
-		}
-		if (tiempomesas[3] < tiempomin) {
-			mesaselec = 3;
-			tiempomin = tiempomesas[3];
+		for (int i = 1; i < tiempomesas.length; i++) {
+			if (tiempomesas[i] < tiempomin) {
+				tiempomin = tiempomesas[i];
+				mesaselec = i;
+			}
 		}
 		System.out.println("--------------------------------------------------------------");
 		System.out.println("Tiempo en solicitar el servicio: " + x);
@@ -94,6 +92,9 @@ public class MonitorBanco {
 		System.out.println("Tiempo de espera en la mesa1 = " + tiempomesas[0] + ", mesa2 = " + tiempomesas[1]
 				+ ", mesa3 = " + tiempomesas[2] + ", mesa4 = " + tiempomesas[3]);
 		System.out.println("--------------------------------------------------------------");
+		for (int i = 0; i < tiempomesas.length; i++) {
+			System.out.println("Mesa " + i + ": " + tiempomesas[i]);
+		}
 		return mesaselec;
 	}
 }
