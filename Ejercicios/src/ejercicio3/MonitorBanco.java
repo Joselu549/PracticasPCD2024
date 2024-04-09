@@ -4,22 +4,25 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MonitorBanco {
-	private int maquinasenuso;
-	private int mesasenuso;
-	private int[] tiempomesas;
-	private ReentrantLock l;
-	private Condition colamaquinas;
-	private Condition colamesas;
 	private static int MAX_MAQUINAS = 3;
 	private static int MAX_MESAS = 4;
+	private int maquinasenuso;
+	private boolean[] mesasenuso = {false, false, false, false};
+	private int[] tiempomesas;
+	private ReentrantLock l;
+	private ReentrantLock p;
+	private Condition colamaquinas;
+	private Condition[] colamesas = new Condition[MAX_MESAS];
 
 	public MonitorBanco() {
 		this.maquinasenuso = 0;
-		this.mesasenuso = 0;
 		this.tiempomesas = new int[MAX_MESAS];
 		this.l = new ReentrantLock();
-		this.colamaquinas = l.newCondition();
-		this.colamesas = l.newCondition();
+		this.p = new ReentrantLock();
+		this.colamaquinas = l.newCondition();	
+		for (int i = 0; i < MAX_MESAS; i++) {
+			this.colamesas[i] = l.newCondition();
+		}
 	}
 
 	public void cogerMaquina() throws InterruptedException {
@@ -50,13 +53,18 @@ public class MonitorBanco {
 		int mesa;
 		l.lock();
 		try {
-			while (mesasenuso >= MAX_MESAS) {
+			mesa = selectMesa(y);
+			
+			while(mesasenuso[mesa]) {
+				colamesas[mesa].await();
+			}
+			mesasenuso[mesa] = true;
+			/*while (mesasenuso >= MAX_MESAS) {
 				colamesas.await();
 			}
 			// Coge mesa
-			mesa = selectMesa(x, y);
-			tiempomesas[mesa] += y;
-			mesasenuso++;
+			mesasenuso++;*/
+			//tiempomesas[mesa] += y;
 		} finally {
 			l.unlock();
 		}
@@ -67,15 +75,18 @@ public class MonitorBanco {
 		l.lock();
 		try {
 			// Suelto mesa
-			mesasenuso--;
+			/*mesasenuso--;
 			tiempomesas[mesa] -= y;
-			colamesas.signal();
+			colamesas.signal();*/
+			mesasenuso[mesa] = false;
+			tiempomesas[mesa] -= y;
+			colamesas[mesa].signal();
 		} finally {
 			l.unlock();
 		}
 	}
 
-	public int selectMesa(int x, int y) {
+	public int selectMesa(int y) {
 		l.lock();
 		int mesaselec;
 		try {
@@ -87,6 +98,7 @@ public class MonitorBanco {
 					mesaselec = i;
 				}
 			}
+			tiempomesas[mesaselec] += y;
 		} finally {
 			l.unlock();
 		}
@@ -95,15 +107,20 @@ public class MonitorBanco {
 	}
 
 	public void print(int mesaselec, int x, int y) {
-		System.out.println("--------------------------------------------------------------");
-		System.out.println("Tiempo en solicitar el servicio: " + x);
-		System.out.println("Será atendido en la mesa: " + mesaselec);
-		System.out.println("Tiempo en la mesa: " + y);
-		System.out.println("Tiempo de espera en la mesa1 = " + tiempomesas[0] + ", mesa2 = " + tiempomesas[1]
-				+ ", mesa3 = " + tiempomesas[2] + ", mesa4 = " + tiempomesas[3]);
-		System.out.println("--------------------------------------------------------------");
-		for (int i = 0; i < tiempomesas.length; i++) {
-			System.out.println("Mesa " + i + ": " + tiempomesas[i]);
+		p.lock();
+		try {
+			System.out.println("--------------------------------------------------------------");
+			System.out.println("Tiempo en solicitar el servicio: " + x);
+			System.out.println("Será atendido en la mesa: " + mesaselec);
+			System.out.println("Tiempo en la mesa: " + y);
+			System.out.println("Tiempo de espera en la mesa0 = " + tiempomesas[0] + ", mesa1 = " + tiempomesas[1]
+					+ ", mesa2 = " + tiempomesas[2] + ", mesa3 = " + tiempomesas[3]);
+			System.out.println("--------------------------------------------------------------");
+			for (int i = 0; i < mesasenuso.length; i++) {
+				System.out.println("Mesa " + i + ": " + mesasenuso[i]);
+			}
+		} finally {
+			p.unlock();
 		}
 	}
 }
