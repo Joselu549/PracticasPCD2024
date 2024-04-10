@@ -14,12 +14,12 @@ public class Cliente extends Thread {
 	@Override
 	public void run() {
 		try {
+			int mesa = monitor.selectMesa(y);
 			monitor.cogerMaquina();
 			Thread.sleep(x);
 			monitor.soltarMaquina();
-			int mesa = monitor.selectMesa(y);
 			monitor.print(mesa, x, y);
-			monitor.cogerMesa(x, y);
+			monitor.cogerMesa(mesa, y);
 			Thread.sleep(y);
 			monitor.soltarMesa(mesa, y);
 		} catch (InterruptedException e) {
