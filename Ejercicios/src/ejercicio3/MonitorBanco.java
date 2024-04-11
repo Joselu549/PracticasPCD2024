@@ -7,19 +7,20 @@ public class MonitorBanco {
 	private static int MAX_MAQUINAS = 3;
 	private static int MAX_MESAS = 4;
 	private int maquinasenuso;
-	private int mesasenuso;
+	private boolean[] mesasenuso;
 	private int[] tiempomesas;
 	private ReentrantLock l;
 	private Condition colamaquinas;
-	private Condition colamesas;
+	private Condition[] colamesas = new Condition[MAX_MESAS];
 
 	public MonitorBanco() {
 		this.maquinasenuso = 0;
-		this.mesasenuso = 0;
+		this.mesasenuso = new boolean[MAX_MESAS];
 		this.tiempomesas = new int[MAX_MESAS];
 		this.l = new ReentrantLock();
 		this.colamaquinas = l.newCondition();
-		this.colamesas = l.newCondition();
+		for (int i = 0; i < MAX_MESAS; i++)
+			this.colamesas[i] = l.newCondition();
 	}
 
 	public void cogerMaquina() throws InterruptedException {
@@ -28,7 +29,6 @@ public class MonitorBanco {
 			while (maquinasenuso >= MAX_MAQUINAS) {
 				colamaquinas.await();
 			}
-			// Coge máquina
 			maquinasenuso++;
 		} finally {
 			l.unlock();
@@ -38,7 +38,6 @@ public class MonitorBanco {
 	public void soltarMaquina() throws InterruptedException {
 		l.lock();
 		try {
-			// Suelto máquina
 			maquinasenuso--;
 			colamaquinas.signal();
 		} finally {
@@ -46,27 +45,25 @@ public class MonitorBanco {
 		}
 	}
 
-	public int cogerMesa(int mesa, int y) throws InterruptedException {
+	public void cogerMesa(int mesa, int y) throws InterruptedException {
 		l.lock();
+		
 		try {
-			while(mesasenuso >= MAX_MESAS) {
-				colamesas.await();
+			while (mesasenuso[mesa]) {
+				colamesas[mesa].await();
 			}
-			mesasenuso++;	
+			mesasenuso[mesa] = true;
+			tiempomesas[mesa] -= y;
 		} finally {
 			l.unlock();
 		}
-		return mesa;
 	}
 
 	public void soltarMesa(int mesa, int y) {
 		l.lock();
 		try {
-			// Suelto mesa
-			mesasenuso--;
-			tiempomesas[mesa] -= y;
-			colamesas.signal();
-			System.out.println("Ha soltado mesa " + mesa + "?");
+			mesasenuso[mesa] = false;
+			colamesas[mesa].signal();
 		} finally {
 			l.unlock();
 		}

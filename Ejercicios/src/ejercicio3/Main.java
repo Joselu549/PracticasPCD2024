@@ -9,7 +9,7 @@ public class Main {
 
 		for (Thread c : clientes) {
 			Random r = new Random();
-			c = new Cliente(300 + r.nextInt(200), 300 + r.nextInt(200), monitor);
+			c = new Cliente(500 + r.nextInt(200), 800 + r.nextInt(400), monitor);
 			c.start();
 		}
 	}
