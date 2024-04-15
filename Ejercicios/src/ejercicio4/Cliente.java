@@ -7,7 +7,7 @@ import messagepassing.*;
 public class Cliente implements Runnable {
 	private CommunicationScheme[] cajas = new MailBox[2];
 	private int id;
-	private String caja = "A";
+	private String caja;
 	
 	public Cliente(CommunicationScheme[] cajas, int id) {
 		this.cajas = cajas;
@@ -29,11 +29,13 @@ public class Cliente implements Runnable {
 			if (tiempopago >= 5) {
 				/* Seleccionar caja A */
 				Object llaveA = cajas[0].receive();
+				caja = "A";
 				try {
 					Thread.sleep(tiempopago * 1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				/* 4.- Libera caja */
 				cajas[0].send(llaveA);
 			} else {
 				/* Seleccionar caja B */
@@ -44,8 +46,10 @@ public class Cliente implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				/* 4.- Libera caja */
 				cajas[1].send(llaveB);
 			}
+			/* 5.- Imprime en pantalla operación */
 			System.out.println("--------------------------------------------------------------");
 			System.out.println("Persona " + id + " ha usado la caja " + caja);
 			System.out.println("Tiempo de pago = " + tiempopago + "s");
