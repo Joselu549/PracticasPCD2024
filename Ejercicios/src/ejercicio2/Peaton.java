@@ -29,68 +29,70 @@ public class Peaton extends Thread {
 
     @Override
     public void run() {
-        if (!direccion) {
-            try {
-                Main.dirpeatones1.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        while (true) {
+        	if (!direccion) {
+                try {
+                    Main.dirpeatones1.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                imprimirInfo();
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Main.dirpeatones1.release();
+                this.direccion = true;
+                try {
+                    Thread.sleep(8000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Main.dirpeatones2.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                imprimirInfo();
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Main.dirpeatones2.release();
+            } else {
+                try {
+                    Main.dirpeatones2.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                imprimirInfo();
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Main.dirpeatones2.release();
+                this.direccion = false;
+                try {
+                    Thread.sleep(8000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Main.dirpeatones1.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                imprimirInfo();
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Main.dirpeatones1.release();
             }
-            imprimirInfo();
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Main.dirpeatones1.release();
-            this.direccion = true;
-            try {
-                Thread.sleep(8000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            try {
-                Main.dirpeatones2.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            imprimirInfo();
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Main.dirpeatones2.release();
-        } else {
-            try {
-                Main.dirpeatones2.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            imprimirInfo();
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Main.dirpeatones2.release();
-            this.direccion = false;
-            try {
-                Thread.sleep(8000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            try {
-                Main.dirpeatones1.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            imprimirInfo();
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Main.dirpeatones1.release();
         }
     }
 }

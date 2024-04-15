@@ -44,133 +44,135 @@ public class Coche extends Thread {
 
     @Override
     public void run() {
-        if (!direccion) {
-            if (!empiezaen) {
-                try {
-                    Main.dirnorte.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        while (true) {
+        	if (!direccion) {
+                if (!empiezaen) {
+                    try {
+                        Main.dirnorte.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    imprimirInfo();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Main.dirnorte.release();
+                    this.empiezaen = true;
+                    try {
+                        Thread.sleep(7000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        Main.dirsur.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    imprimirInfo();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Main.dirsur.release();
+                } else {
+                    try {
+                        Main.dirsur.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    imprimirInfo();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Main.dirsur.release();
+                    this.empiezaen = false;
+                    try {
+                        Thread.sleep(7000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        Main.dirnorte.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    imprimirInfo();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Main.dirnorte.release();
                 }
-                imprimirInfo();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Main.dirnorte.release();
-                this.empiezaen = true;
-                try {
-                    Thread.sleep(7000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Main.dirsur.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                imprimirInfo();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Main.dirsur.release();
             } else {
-                try {
-                    Main.dirsur.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (!empiezaen) {
+                    try {
+                        Main.direste.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    imprimirInfo();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Main.direste.release();
+                    this.empiezaen = true;
+                    try {
+                        Thread.sleep(7000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        Main.diroeste.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    imprimirInfo();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Main.diroeste.release();
+                } else {
+                    try {
+                        Main.diroeste.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    imprimirInfo();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Main.diroeste.release();
+                    this.empiezaen = false;
+                    try {
+                        Thread.sleep(7000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        Main.direste.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    imprimirInfo();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Main.direste.release();
                 }
-                imprimirInfo();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Main.dirsur.release();
-                this.empiezaen = false;
-                try {
-                    Thread.sleep(7000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Main.dirnorte.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                imprimirInfo();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Main.dirnorte.release();
-            }
-        } else {
-            if (!empiezaen) {
-                try {
-                    Main.direste.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                imprimirInfo();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Main.direste.release();
-                this.empiezaen = true;
-                try {
-                    Thread.sleep(7000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Main.diroeste.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                imprimirInfo();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Main.diroeste.release();
-            } else {
-                try {
-                    Main.diroeste.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                imprimirInfo();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Main.diroeste.release();
-                this.empiezaen = false;
-                try {
-                    Thread.sleep(7000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Main.direste.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                imprimirInfo();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Main.direste.release();
             }
         }
     }
