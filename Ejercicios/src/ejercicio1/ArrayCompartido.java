@@ -7,7 +7,6 @@ public class ArrayCompartido {
 	private int[] arrayCompartido = new int[110];
 	private double[] arrayRes = new double[10];
 	private ReentrantLock cerrojoArray = new ReentrantLock();
-	private ReentrantLock cerrojoRes = new ReentrantLock();
 
 	public int[] getArrayID(int id) {
 		int[] aux = new int[11];
@@ -37,24 +36,15 @@ public class ArrayCompartido {
 	}
 	
 	public void llenarArrayRes(int id, int val) {
-		cerrojoRes.lock();
-		try {
-			arrayRes[id] = val;
-		} finally {
-			cerrojoRes.unlock();
-		}
+		// No uso cerrojo porque solo un hilo se mete en esa posición del array a escribir
+		arrayRes[id] = val;
 	}
 
 	public int sumarArrayRes() {
-		cerrojoRes.lock();
-		try {
-			int res = 0;
-			for (int i = 0; i < 10; i++) {
-				res += arrayRes[i];
-			}
-			return res;
-		} finally {
-			cerrojoRes.unlock();
+		int res = 0;
+		for (int i = 0; i < 10; i++) {
+			res += arrayRes[i];
 		}
+		return res;
 	}
 }
