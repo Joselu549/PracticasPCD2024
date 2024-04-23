@@ -43,7 +43,8 @@ public class Coche extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run() { 
+    	
         while (true) {
         	if (!direccion) {
                 if (!empiezaen) {

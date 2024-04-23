@@ -20,8 +20,7 @@ public class SemaforoNorteSur extends Thread {
             Main.pantalla.release();
             
             Main.dirnorte.release(4);
-            Main.dirsur.release(4);
-
+           
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
@@ -30,6 +29,16 @@ public class SemaforoNorteSur extends Thread {
 
             try {
                 Main.dirnorte.acquire(4);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Main.dirsur.release(4);
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
                 Main.dirsur.acquire(4);
             } catch (InterruptedException e) {
                 e.printStackTrace();

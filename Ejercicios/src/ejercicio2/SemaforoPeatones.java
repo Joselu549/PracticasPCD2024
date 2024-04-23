@@ -19,7 +19,6 @@ public class SemaforoPeatones extends Thread {
             Main.pantalla.release();
 
             Main.dirpeatones1.release(10);
-            Main.dirpeatones2.release(10);
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
@@ -27,6 +26,17 @@ public class SemaforoPeatones extends Thread {
             }
             try {
                 Main.dirpeatones1.acquire(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            
+            Main.dirpeatones2.release(10);
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
                 Main.dirpeatones2.acquire(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
