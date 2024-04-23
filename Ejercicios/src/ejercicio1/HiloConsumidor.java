@@ -13,10 +13,6 @@ public class HiloConsumidor extends Thread {
 		this.pantalla = pantalla;
 	}
 
-	public int getID() {
-		return id;
-	}
-
 	private int evaluarExpresion(int[] a) {
 		int res = a[0];
 		for (int i = 2; i < 11; i += 2) {
