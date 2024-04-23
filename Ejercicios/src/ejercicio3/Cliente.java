@@ -21,7 +21,7 @@ public class Cliente extends Thread {
 			monitor.print(mesa, x, y);
 			monitor.cogerMesa(mesa, y);
 			Thread.sleep(y);
-			monitor.soltarMesa(mesa, y);
+			monitor.soltarMesa(mesa);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

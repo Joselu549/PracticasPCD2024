@@ -26,7 +26,7 @@ public class MonitorBanco {
 	public void cogerMaquina() throws InterruptedException {
 		l.lock();
 		try {
-			while (maquinasenuso >= MAX_MAQUINAS) {
+			if (maquinasenuso >= MAX_MAQUINAS) {
 				colamaquinas.await();
 			}
 			maquinasenuso++;
@@ -47,9 +47,8 @@ public class MonitorBanco {
 
 	public void cogerMesa(int mesa, int y) throws InterruptedException {
 		l.lock();
-		
 		try {
-			while (mesasenuso[mesa]) {
+			if (mesasenuso[mesa]) {
 				colamesas[mesa].await();
 			}
 			mesasenuso[mesa] = true;
@@ -59,7 +58,7 @@ public class MonitorBanco {
 		}
 	}
 
-	public void soltarMesa(int mesa, int y) {
+	public void soltarMesa(int mesa) {
 		l.lock();
 		try {
 			mesasenuso[mesa] = false;
