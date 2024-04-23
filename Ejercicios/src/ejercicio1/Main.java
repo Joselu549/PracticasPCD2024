@@ -10,17 +10,25 @@ public class Main {
 		Thread productor = new HiloProductor(arrayCompartido);
 		Thread sumador = new HiloSumador(arrayCompartido, pantalla);
 		productor.start();
-		sumador.start();
+		try {
+			productor.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		Thread[] arrayConsumidores = new Thread[10];
 		for (int i = 0; i < 10; i++) {
 			arrayConsumidores[i] = new HiloConsumidor(i, arrayCompartido, pantalla);
 			arrayConsumidores[i].start();
 		}
 		try {
-			productor.join();
-			sumador.join();
 			for (Thread c : arrayConsumidores)
 				c.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		sumador.start();
+		try {
+			sumador.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
