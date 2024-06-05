@@ -3,35 +3,44 @@ package ejercicio2;
 import java.util.concurrent.Semaphore;
 
 public class Main {
-    public static Semaphore dirnorte = new Semaphore(0);
-    public static Semaphore dirsur = new Semaphore(0);
-    public static Semaphore direste = new Semaphore(0);
-    public static Semaphore diroeste = new Semaphore(0);
-    public static Semaphore dirpeatones1 = new Semaphore(0);
-    public static Semaphore dirpeatones2 = new Semaphore(0);
-    public static Semaphore pantalla = new Semaphore(1);
-    public static Semaphore mutex1 = new Semaphore(1);
-    public static Semaphore mutex2 = new Semaphore(0);
-    public static Semaphore mutex3 = new Semaphore(0);
+	public static Semaphore mutex = new Semaphore(1);
+	public static Semaphore mutexPantalla = new Semaphore(1);
+	public static Semaphore norteSur = new Semaphore(0);
+	public static Semaphore esteOeste = new Semaphore(0);
+	public static Semaphore peatones = new Semaphore(0);
+	public static Semaphore cochesNS = new Semaphore(0);
+	public static Semaphore cochesEO = new Semaphore(0);
+	public static Semaphore peatonesPE = new Semaphore(0);
+	public static boolean ocupado = false;
+	public static int direccionPasando = 0;		// 0 = NS, 1 = EO, 2 = PE
+	public static int ncochesNSe = 0;
+	public static int ncochesEOe = 0;
+	public static int numeroPEe = 0;
+	public static int ncochesNS = 0;
+	public static int ncochesEO = 0;
+	public static int numeroPE = 0;
+	
+	private static int NUM_COCHES = 50;
+	private static int NUM_PEATONES = 100;
+	
 	public static void main(String[] args) {
-            
-        Thread[] arraycoches = new Thread[50];
-        Thread[] arraypeatones = new Thread[100];
-        for (Thread c : arraycoches) {
-            c = new Coche();
-            c.start();
-        }
-        
-        for (Thread p : arraypeatones) {
-            p = new Peaton();
-            p.start();
-        }
-        
-        SemaforoNorteSur semnortesur = new SemaforoNorteSur();
-        SemafotoEsteOeste semesteoeste = new SemafotoEsteOeste();
-        SemaforoPeatones sempeatones = new SemaforoPeatones();
-        semnortesur.start();
-        semesteoeste.start();
-        sempeatones.start();
+		SemaforoNorteSur semNS = new SemaforoNorteSur();
+		SemaforoEsteOeste semEO = new SemaforoEsteOeste();
+		SemaforoPeatones semPE = new SemaforoPeatones();
+		Thread[] arrayCoches = new Thread[NUM_COCHES];
+		Thread[] arrayPeatones = new Thread[NUM_PEATONES];
+		
+		for (int i = 0; i < NUM_COCHES; i++) {
+			arrayCoches[i] = new Coche();
+			arrayCoches[i].start();
+		}
+		for (int i = 0; i < NUM_PEATONES; i++) {
+			arrayPeatones[i] = new Peaton();
+			arrayPeatones[i].start();
+		}
+		
+		semNS.start();
+		semEO.start();
+		semPE.start();
 	}
 }
