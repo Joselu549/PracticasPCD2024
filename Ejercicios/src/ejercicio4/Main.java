@@ -1,28 +1,21 @@
 package ejercicio4;
 
-import messagepassing.MailBox;
+import messagepassing.*;
 
 public class Main {
-	public static int MAX_CLIENTES = 30;
+
 	public static void main(String[] args) {
-		MailBox[] cajas = new MailBox[2];
-		Thread[] clientes = new Thread[MAX_CLIENTES];
-		cajas[0] = new MailBox();
-		cajas[0].send("llaveA");
-		cajas[1] = new MailBox();
-		cajas[1].send("llaveB");
-		for (int i = 0; i < MAX_CLIENTES; i++) {
-			clientes[i] = new Thread(new Cliente(cajas, i));
-			clientes[i].start();
+		MailBox cajaA = new MailBox();
+		MailBox cajaB = new MailBox();
+		MailBox mutex = new MailBox();
+		mutex.send("token");
+		Controlador controlador = new Controlador(cajaA, cajaB);
+		controlador.start();
+		Thread[] array = new Thread[30];
+		for (int i = 0; i < 30; i++) {
+			array[i] = new Persona(cajaA, cajaB, mutex);
+			array[i].start();
 		}
-		
-		try {
-			for (int i = 0; i < MAX_CLIENTES; i++) {
-				clientes[i].join();
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println("Termina el programa");
 	}
+
 }
