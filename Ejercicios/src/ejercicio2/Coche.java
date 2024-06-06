@@ -6,88 +6,55 @@ public class Coche extends Thread {
 		while (true) {
 			try {
 				Main.mutex.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (Main.ncochesNS == 4 || Main.direccionPasando == 1 || Main.direccionPasando == 2) {
-				Main.ncochesNSe++;
-				Main.mutex.release();
-				try {
+				if (Main.ncochesNS >= 4 || Main.direccionPasando == 1 || Main.direccionPasando == 2) {
+					Main.ncochesNSe++;
+					Main.mutex.release();
 					Main.cochesNS.acquire();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Main.ncochesNSe--;
 				}
-				Main.ncochesNSe--;
-			}
-			Main.ncochesNS++;
-			if (Main.ncochesNSe > 0 && Main.ncochesNS < 4)
-				Main.cochesNS.release();
-			else
-				Main.mutex.release();
-			System.out.println("Pasando coche NS id: " + getId());
-			try {
+				Main.ncochesNS++;
+				System.out.println("Pasando coche NS id: " + getId());
+				if (Main.ncochesNSe > 0 && Main.ncochesNS < 4)
+					Main.cochesNS.release();
+				else
+					Main.mutex.release();
+
 				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			try {
+
 				Main.mutex.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			Main.ncochesNS--;
-			if (Main.direccionPasando == 0 && Main.ncochesNSe > 0) {
-				Main.cochesNS.release();
-			} else {
-				Main.mutex.release();
-			}
-			
-			try {
+				Main.ncochesNS--;
+				if (Main.direccionPasando == 0 && Main.ncochesNSe > 0)
+					Main.cochesNS.release();
+				else
+					Main.mutex.release();
+
 				Thread.sleep(7000);
-			} catch (InterruptedException e) {	// Espera para cruzar en la otra dirección
-				e.printStackTrace();
-			}
-			
-			try {
+
 				Main.mutex.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (Main.ncochesEO == 4 || Main.direccionPasando == 0 || Main.direccionPasando == 2) {
-				Main.ncochesEOe++;
-				Main.mutex.release();
-				try {
+				if (Main.ncochesEO >= 4 || Main.direccionPasando == 0 || Main.direccionPasando == 2) {
+					Main.ncochesEOe++;
+					Main.mutex.release();
 					Main.cochesEO.acquire();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Main.ncochesEOe--;
 				}
-				Main.ncochesEOe--;
-			}
-			Main.ncochesEO++;
-			if (Main.ncochesEOe > 0 && Main.ncochesEO < 4)
-				Main.cochesEO.release();
-			else
-				Main.mutex.release();
-			System.out.println("Pasando coche EO id: " + getId());
-			try {
+				Main.ncochesEO++;
+				System.out.println("Pasando coche EO id: " + getId());
+				if (Main.ncochesEOe > 0 && Main.ncochesEO < 4)
+					Main.cochesEO.release();
+				else
+					Main.mutex.release();
+
 				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			try {
+
 				Main.mutex.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			Main.ncochesEO--;
-			if (Main.direccionPasando == 1 && Main.ncochesEOe > 0) {
-				Main.cochesEO.release();
-			} else {
-				Main.mutex.release();
-			}
-			try {
+				Main.ncochesEO--;
+				if (Main.direccionPasando == 1 && Main.ncochesEOe > 0)
+					Main.cochesEO.release();
+				else
+					Main.mutex.release();
 				Thread.sleep(7000);
 			} catch (InterruptedException e) {
+				System.err.println("Error en el Coche con id: " + getId());
 				e.printStackTrace();
 			}
 		}

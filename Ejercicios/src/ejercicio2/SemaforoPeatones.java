@@ -6,36 +6,25 @@ public class SemaforoPeatones extends Thread {
 		while (true) {
 			try {
 				Main.mutex.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (Main.ocupado || Main.direccionPasando == 0 || Main.direccionPasando == 1) {
-				Main.mutex.release();
-				try {
+				if (Main.direccionPasando == 0 || Main.direccionPasando == 1) {
+					Main.mutex.release();
 					Main.peatones.acquire();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
 				}
-			}
-			Main.ocupado = true;
-			Main.direccionPasando = 2;
-			Main.mutex.release();
-			System.out.println("Toca paso de semáforo Peatones");
-			if (Main.numeroPEe > 0)
-				Main.peatonesPE.release();
-			try {
+				System.out.println("Toca paso de semáforo Peatones");
+				Main.direccionPasando = 2;
+				if (Main.numeroPEe > 0)
+					Main.peatonesPE.release();
+				Main.mutex.release();
+
 				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			try {
+
 				Main.mutex.acquire();
+				Main.direccionPasando = 0;
+				Main.norteSur.release();
 			} catch (InterruptedException e) {
+				System.err.println("Error en el Semáforo Peatones");
 				e.printStackTrace();
 			}
-			Main.ocupado = false;
-			Main.direccionPasando = 0;
-			Main.norteSur.release();
 		}
 	}
 }

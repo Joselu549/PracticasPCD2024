@@ -4,7 +4,6 @@ import java.util.concurrent.Semaphore;
 
 public class Main {
 	public static Semaphore mutex = new Semaphore(1);
-	public static Semaphore mutexPantalla = new Semaphore(1);
 	public static Semaphore norteSur = new Semaphore(0);
 	public static Semaphore esteOeste = new Semaphore(0);
 	public static Semaphore peatones = new Semaphore(0);
@@ -29,7 +28,9 @@ public class Main {
 		SemaforoPeatones semPE = new SemaforoPeatones();
 		Thread[] arrayCoches = new Thread[NUM_COCHES];
 		Thread[] arrayPeatones = new Thread[NUM_PEATONES];
-		
+		semNS.start();
+		semEO.start();
+		semPE.start();
 		for (int i = 0; i < NUM_COCHES; i++) {
 			arrayCoches[i] = new Coche();
 			arrayCoches[i].start();
@@ -39,8 +40,6 @@ public class Main {
 			arrayPeatones[i].start();
 		}
 		
-		semNS.start();
-		semEO.start();
-		semPE.start();
+		
 	}
 }
