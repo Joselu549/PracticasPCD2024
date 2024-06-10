@@ -3,17 +3,19 @@ package ejercicio4;
 import messagepassing.*;
 
 public class Main {
-
+	public static MailBox[] respuestas = new MailBox[30];
 	public static void main(String[] args) {
-		MailBox cajaA = new MailBox();
-		MailBox cajaB = new MailBox();
+		MailBox pedirCaja = new MailBox();
+		MailBox pagarCaja = new MailBox();
+		MailBox liberarCaja = new MailBox();
 		MailBox mutex = new MailBox();
 		mutex.send("token");
-		Controlador controlador = new Controlador(cajaA, cajaB);
+		Controlador controlador = new Controlador(pedirCaja, pagarCaja, liberarCaja);
 		controlador.start();
 		Thread[] array = new Thread[30];
 		for (int i = 0; i < 30; i++) {
-			array[i] = new Persona(cajaA, cajaB, mutex);
+			respuestas[i] = new MailBox();
+			array[i] = new Persona(i, pedirCaja, pagarCaja, liberarCaja, mutex);
 			array[i].start();
 		}
 	}
