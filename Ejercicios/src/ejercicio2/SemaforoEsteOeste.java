@@ -6,24 +6,23 @@ public class SemaforoEsteOeste extends Thread {
 		while (true) {
 			try {
 				Main.mutex.acquire();
-				if (Main.direccionPasando == 0 || Main.direccionPasando == 2) {
+				if (Main.direccionPasando != 1 || Main.ncochesNS > 0) {
 					Main.mutex.release();
 					Main.esteOeste.acquire();
 				}
-				System.out.println("Toca paso de semáforo Este - Oeste");
 				Main.direccionPasando = 1;
+				System.out.println("Toca paso de semáforo Este - Oeste");
 				if (Main.ncochesEOe > 0)
 					Main.cochesEO.release();
-				Main.mutex.release();
+				else
+					Main.mutex.release();
 
 				Thread.sleep(5000);
 
 				Main.mutex.acquire();
-				Main.direccionPasando = 2;
 				Main.peatones.release();
 			} catch (InterruptedException e) {
 				System.err.println("Error en el Semáforo Este - Oeste");
-				e.printStackTrace();
 			}
 		}
 	}

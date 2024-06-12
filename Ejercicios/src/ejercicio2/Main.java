@@ -10,7 +10,7 @@ public class Main {
 	public static Semaphore cochesNS = new Semaphore(0);
 	public static Semaphore cochesEO = new Semaphore(0);
 	public static Semaphore peatonesPE = new Semaphore(0);
-	public static boolean ocupado = false;
+	//public static int ncalzada = 0;
 	public static int direccionPasando = 0;		// 0 = NS, 1 = EO, 2 = PE
 	public static int ncochesNSe = 0;
 	public static int ncochesEOe = 0;
