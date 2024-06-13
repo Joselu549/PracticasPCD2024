@@ -5,6 +5,10 @@ import messagepassing.*;
 public class Main {
 	public static MailBox[] respuestas = new MailBox[30];
 
+	/**
+	 * Método principal del ejercicio 4. En esta clase se crean e inicializan los
+	 * buzones, los clientes y el proceso controlador.
+	 */
 	public static void main(String[] args) {
 		MailBox realizarPago = new MailBox();
 		MailBox pedirCaja = new MailBox();

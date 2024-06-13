@@ -21,7 +21,7 @@ public class Main {
 	private static int NUM_PEATONES = 100;
 
 	/**
-	 * Clase principal del ejercicio 2. En esta clase se inicializan los semáforos y
+	 * Método principal del ejercicio 2. En esta clase se inicializan los semáforos y
 	 * los procesos que utilizan las variables compartidas, tanto coches y peatones
 	 * como semáforos de paso.
 	 */
