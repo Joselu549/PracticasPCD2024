@@ -1,20 +1,21 @@
 package ejercicio4;
 
-import java.util.Random;
-
 import messagepassing.*;
 
 class Persona extends Thread {
 	private int tiempoPago = 0;
 	private int index;
-	private MailBox pedirCaja, pagarCaja, liberarCaja, mutex;
+	private MailBox realizarPago, pedirCaja, pagarCaja, liberarCaja, imprimirPantalla, liberarPantalla;
 
-	public Persona(int index, MailBox pedirCaja, MailBox pagarCaja, MailBox liberarCaja, MailBox mutex) {
+	public Persona(int index, MailBox realizarPago, MailBox pedirCaja, MailBox pagarCaja, MailBox liberarCaja,
+			MailBox imprimirPantalla, MailBox liberarPantalla) {
 		this.index = index;
+		this.realizarPago = realizarPago;
 		this.pedirCaja = pedirCaja;
 		this.pagarCaja = pagarCaja;
 		this.liberarCaja = liberarCaja;
-		this.mutex = mutex;
+		this.imprimirPantalla = imprimirPantalla;
+		this.liberarPantalla = liberarPantalla;
 	}
 
 	@Override
@@ -22,31 +23,27 @@ class Persona extends Thread {
 		try {
 			for (int i = 0; i < 5; i++) {
 				// 1. Realiza compra
-				Random r = new Random();
-				tiempoPago = 1 + r.nextInt(10);
+				realizarPago.send(this.index);
+				tiempoPago = (int) Main.respuestas[index].receive();
 				// 2. Solicita caja
-				Object[] array = { index, tiempoPago };
-				pedirCaja.send(array);
-				char caja = (char) Main.respuestas[index].receive();
+				pedirCaja.send(index + ":" + tiempoPago);
+				String caja = (String) Main.respuestas[index].receive();
 				// 3. Paga en caja
-				Object[] array2 = { index, caja, tiempoPago };
-				pagarCaja.send(array2);
-				boolean pagado = (boolean) Main.respuestas[index].receive();
+				pagarCaja.send(index + ":" + tiempoPago + ":" + caja);
+				Main.respuestas[index].receive();
 				Thread.sleep(tiempoPago * 1000);
 				// 4. Libera caja
-				if (pagado) {
-					Object[] array3 = { index, caja };
-					liberarCaja.send(array3);
-				}
+				liberarCaja.send(caja);
 				// 5. Imprime en pantalla
-				Object token = mutex.receive();
+				imprimirPantalla.send(index);
+				Main.respuestas[index].receive();
 				System.out.println("--------------------------------------------------------------");
 				System.out.println("Persona " + index + " ha usado la caja " + caja);
 				System.out.println("Tiempo de pago = " + tiempoPago);
 				System.out.println("Thread.sleep(" + tiempoPago + ");");
 				System.out.println("Persona " + index + " ha liberado la caja " + caja);
 				System.out.println("--------------------------------------------------------------");
-				mutex.send(token);
+				liberarPantalla.send("");
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

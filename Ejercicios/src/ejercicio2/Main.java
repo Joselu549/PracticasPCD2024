@@ -10,18 +10,17 @@ public class Main {
 	public static Semaphore cochesNS = new Semaphore(0);
 	public static Semaphore cochesEO = new Semaphore(0);
 	public static Semaphore peatonesPE = new Semaphore(0);
-	//public static int ncalzada = 0;
-	public static int direccionPasando = 0;		// 0 = NS, 1 = EO, 2 = PE
+	public static int direccionPasando = 0; // 0 = NS, 1 = EO, 2 = PE
 	public static int ncochesNSe = 0;
 	public static int ncochesEOe = 0;
 	public static int numeroPEe = 0;
 	public static int ncochesNS = 0;
 	public static int ncochesEO = 0;
 	public static int numeroPE = 0;
-	
+
 	private static int NUM_COCHES = 50;
 	private static int NUM_PEATONES = 100;
-	
+
 	public static void main(String[] args) {
 		SemaforoNorteSur semNS = new SemaforoNorteSur();
 		SemaforoEsteOeste semEO = new SemaforoEsteOeste();
@@ -39,7 +38,6 @@ public class Main {
 			arrayPeatones[i] = new Peaton();
 			arrayPeatones[i].start();
 		}
-		
-		
+
 	}
 }
