@@ -17,10 +17,14 @@ public class Main {
 	public static int ncochesNS = 0;
 	public static int ncochesEO = 0;
 	public static int numeroPE = 0;
-
 	private static int NUM_COCHES = 50;
 	private static int NUM_PEATONES = 100;
 
+	/**
+	 * Clase principal del ejercicio 2. En esta clase se inicializan los semáforos y
+	 * los procesos que utilizan las variables compartidas, tanto coches y peatones
+	 * como semáforos de paso.
+	 */
 	public static void main(String[] args) {
 		SemaforoNorteSur semNS = new SemaforoNorteSur();
 		SemaforoEsteOeste semEO = new SemaforoEsteOeste();
